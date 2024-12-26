@@ -1,68 +1,77 @@
-# vue-admin-template
 
-> 这是一个极简的 vue admin 管理后台。它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
 
-[线上地址](http://panjiachen.github.io/vue-admin-template)
+  <h1 align="center">go-cmdb-ops-web</h1>
+  <p align="center">
+ 此项目是go-cmdb-ops的前端
+    <br />
+	<br />
+	此项目后端地址： https://github.com/ch-ld/go-cmdb-ops
 
-[国内访问](https://panjiachen.gitee.io/vue-admin-template)
+  </p>
+    <br />
 
-目前版本为 `v4.0+` 基于 `vue-cli` 进行构建，若你想使用旧版本，可以切换分支到[tag/3.11.0](https://github.com/PanJiaChen/vue-admin-template/tree/tag/3.11.0)，它不依赖 `vue-cli`。
+## 技术栈 
 
-<p align="center">
-  <b>SPONSORED BY</b>
-</p>
-<p align="center">
-   <a href="https://finclip.com?from=vue_element" title="FinClip" target="_blank">
-      <img height="200px" src="https://gitee.com/panjiachen/gitee-cdn/raw/master/vue%E8%B5%9E%E5%8A%A9.png" title="FinClip">
-   </a>
-</p>
+#### 后端 Golang 1.19
 
-## Extra
+- Gin 1.9.1             [(Web框架)](https://gin-gonic.com/zh-cn/)
+- GORM v1.9.16     [(ORM)](https://gorm.io/zh_CN/)
+- MySQL 8.0             [(数据库)](https://www.mysql.com/)
 
-如果你想要根据用户角色来动态生成侧边栏和 router，你可以使用该分支[permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control)
+#### 前端 Vue.js 3
 
-## 相关项目
+- vue-admin-template                     [(后台前端)](http://panjiachen.github.io/vue-admin-template)
 
-- [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
+#### 已实现的功能
 
-- [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
+- [x] 内部导航栏
+- [x] 用户中心
+  - [x] 用户管理
+  - [x] 角色管理
+- [x] CMDB
+  - [x] 主机管理
+    - [x] 新增主机
+    - [x] 导入主机
+    - [x] 同步云主机
+      - [ ] 阿里云
+      - [ ] AWS
+  - [x] 主机组管理
+  - [x] 远程操作
+    - [x] wehssh
+    - [x] 批量执行命令
+    - [x] SFTP
+      - [x] 文件上传
+      - [x] 创建文件
+      - [x] 文件下载
+      - [x] 文件批量删除
+- [ ] k8s的多集群管理
 
-- [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template)
+## 部署方法
 
-- [awesome-project](https://github.com/PanJiaChen/vue-element-admin/issues/2312)
+### 开发
 
-写了一个系列的教程配套文章，如何从零构建后一个完整的后台项目:
-
-- [手摸手，带你用 vue 撸后台 系列一(基础篇)](https://juejin.im/post/59097cd7a22b9d0065fb61d2)
-- [手摸手，带你用 vue 撸后台 系列二(登录权限篇)](https://juejin.im/post/591aa14f570c35006961acac)
-- [手摸手，带你用 vue 撸后台 系列三 (实战篇)](https://juejin.im/post/593121aa0ce4630057f70d35)
-- [手摸手，带你用 vue 撸后台 系列四(vueAdmin 一个极简的后台基础模板,专门针对本项目的文章,算作是一篇文档)](https://juejin.im/post/595b4d776fb9a06bbe7dba56)
-- [手摸手，带你封装一个 vue component](https://segmentfault.com/a/1190000009090836)
-
-## Build Setup
-
-```bash
+```js
 # 克隆项目
-git clone https://github.com/PanJiaChen/vue-admin-template.git
+git clone https://github.com/ch-ld/go-cmdb-ops-web.git
 
 # 进入项目目录
-cd vue-admin-template
+cd go-cmdb-ops-web
 
 # 安装依赖
 npm install
 
-# 建议不要直接使用 cnpm 安装以来，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
+# 建议不要直接使用 cnpm 安装依赖，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
 npm install --registry=https://registry.npm.taobao.org
 
 # 启动服务
 npm run dev
 ```
 
-浏览器访问 [http://localhost:9528](http://localhost:9528)
+浏览器访问 [http://localhost:9527](http://localhost:9527/)
 
-## 发布
+### 发布
 
-```bash
+```js
 # 构建测试环境
 npm run build:stage
 
@@ -70,9 +79,9 @@ npm run build:stage
 npm run build:prod
 ```
 
-## 其它
+### 其它
 
-```bash
+```js
 # 预览发布环境效果
 npm run preview
 
@@ -88,24 +97,37 @@ npm run lint -- --fix
 
 更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)
 
-## 购买贴纸
+#### 如何参与开源项目
 
-你也可以通过 购买[官方授权的贴纸](https://smallsticker.com/product/vue-element-admin) 的方式来支持 vue-element-admin - 每售出一张贴纸，我们将获得 2 元的捐赠。
+贡献使开源社区成为一个学习、激励和创造的绝佳场所。你所作的任何贡献都是**非常感谢**的。
 
-## Demo
 
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Browsers support
+### 版本控制
 
-Modern browsers and Internet Explorer 10+.
+该项目使用Git进行版本管理。您可以在repository参看当前可用版本。
 
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| --------- | --------- | --------- | --------- |
-| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
+### 作者
 
-## License
+暂无
 
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
 
-Copyright (c) 2017-present PanJiaChen
+### 版权说明
+
+该项目签署了MIT 授权许可
+
+### 鸣谢
+
+[cmdb-ops-flow](https://github.com/qishu321/cmdb-ops-flow) 强烈感谢cmdb-ops-flow提供的基本框架，开始所有的流程和思路都是基于这个基础之上来配置的
+
+[vue-admin-template](http://panjiachen.github.io/vue-admin-template) 非常感谢vue-admin-template的开源项目
+
+[webssh](https://github.com/widaT/webssh)               非常感谢widaT的webssh开源项目
+
+[shaojintian README模板](https://github.com/shaojintian/Best_README_template)  非常感谢 shaojintian README模板
+
