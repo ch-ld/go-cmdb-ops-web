@@ -494,9 +494,7 @@
         <el-form-item label="AccessKey" prop="accessKey">
           <el-input
             v-model="syncForm.accessKey"
-            type="password"
             placeholder="请输入AccessKey"
-            show-password
           />
         </el-form-item>
 
@@ -589,35 +587,10 @@ export default {
           { id: 'cn-hongkong', name: '中国香港' }
         ],
         aws: [
-          { id: 'us-east-1', name: '美国东部（弗吉尼亚北部）' },
-          { id: 'us-east-2', name: '美国东部（俄亥俄州）' },
-          { id: 'us-west-1', name: '美国西部（加利福尼亚北部）' },
-          { id: 'us-west-2', name: '美国西部（俄勒冈州）' },
-          { id: 'af-south-1', name: '非洲（开普敦）' },
-          { id: 'ap-east-1', name: '亚太地区（香港）' },
-          { id: 'ap-south-2', name: '亚太地区（德拉巴）' },
-          { id: 'ap-southeast-3', name: '亚太地区（雅加达）' },
-          { id: 'ap-southeast-4', name: '亚太地区（墨尔本）' },
-          { id: 'ap-south-1', name: '亚太地区（孟买）' },
-          { id: 'ap-northeast-3', name: '亚太地区（大阪）' },
-          { id: 'ap-northeast-2', name: '亚太地区（首尔）' },
-          { id: 'ap-southeast-1', name: '亚太地区（新加坡）' },
-          { id: 'ap-southeast-2', name: '亚太地区（悉尼）' },
-          { id: 'ap-northeast-1', name: '亚太地区（东京）' },
-          { id: 'ca-central-1', name: '加拿大（中部）' },
-          { id: 'ca-west-1', name: '加拿大（卡尔加里）' },
-          { id: 'eu-central-1', name: '欧洲（法兰克福）' },
-          { id: 'eu-west-1', name: '欧洲（爱尔兰）' },
-          { id: 'eu-west-2', name: '欧洲（伦敦）' },
-          { id: 'eu-south-1', name: '欧洲（米兰）' },
-          { id: 'eu-west-3', name: '欧洲（巴黎）' },
-          { id: 'eu-south-2', name: '欧洲（西班牙）' },
-          { id: 'eu-north-1', name: '欧洲（斯德哥尔摩）' },
-          { id: 'eu-central-2', name: '欧洲（苏黎世）' },
-          { id: 'me-south-1', name: '中东（巴林）' },
-          { id: 'me-central-1', name: '中东（阿联酋）' },
-          { id: 'il-central-1', name: '中东（特拉维夫）' },
-          { id: 'sa-east-1', name: '南美洲（圣保罗）' }
+          { id: 'us-east-1', name: '美国东部 (弗吉尼亚)' },
+          { id: 'us-west-1', name: '美国西部 (加利福尼亚)' },
+          { id: 'ap-northeast-1', name: '亚太地区 (东京)' },
+          { id: 'eu-west-1', name: '欧洲 (爱尔兰)' }
         ]
       },
       // 主机组相关

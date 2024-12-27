@@ -123,7 +123,7 @@
               </span>
               <span>
                 <i class="el-icon-monitor" />
-                {{ convertToGB(row.memory) }}GB
+                {{ row.memory }}GB
                 <el-progress
                   :percentage="row.memoryUsage"
                   :color="getResourceColor(row.memoryUsage)"
@@ -146,9 +146,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="系统信息" min-width="130">
+        <el-table-column label="系统信息" min-width="80">
           <template slot-scope="{ row }">
-            <div>{{ row.osType }}/{{ row.osVersion }}</div>
+            <div>{{ row.osType }} {{ row.osVersion }}</div>
             <div class="text-gray">{{ row.kernelVersion }}</div>
           </template>
         </el-table-column>
@@ -453,6 +453,16 @@
       :status="importStatus"
     />
 
+    <!-- <div class="import-actions">
+      <el-button type="primary" :loading="importing" @click="submitImport">
+        开始导入
+      </el-button>
+      <el-button type="text" :loading="downloading" @click="downloadTemplate">
+        <i class="el-icon-download" />
+        下载导入模板
+      </el-button>
+    </div> -->
+
     <!-- 导入结果展示 -->
     <div v-if="importResult" class="import-result">
       <div class="result-header" :class="importStatus">
@@ -466,52 +476,23 @@
         </div>
       </div>
     </div>
+    </el-dialog>
 
     <!-- 同步云主机对话框 -->
     <el-dialog
       title="同步云主机"
       :visible.sync="syncVisible"
-      width="600px"
-      :close-on-click-modal="false"
+      width="500px"
     >
-      <el-form
-        ref="syncForm"
-        :model="syncForm"
-        :rules="syncFormRules"
-        label-width="120px"
-      >
+      <el-form ref="syncForm" :model="syncForm" label-width="100px">
         <el-form-item label="云服务商" prop="provider">
-          <el-select
-            v-model="syncForm.provider"
-            style="width: 100%"
-            @change="handleProviderChange"
-          >
+          <el-select v-model="syncForm.provider" style="width: 100%">
             <el-option label="阿里云" value="aliyun" />
             <el-option label="AWS" value="aws" />
           </el-select>
         </el-form-item>
-
-        <el-form-item label="AccessKey" prop="accessKey">
-          <el-input
-            v-model="syncForm.accessKey"
-            type="password"
-            placeholder="请输入AccessKey"
-            show-password
-          />
-        </el-form-item>
-
-        <el-form-item label="AccessSecret" prop="accessSecret">
-          <el-input
-            v-model="syncForm.accessSecret"
-            type="password"
-            placeholder="请输入AccessSecret"
-            show-password
-            style="width: 100%"
-          />
-          <div class="accesssecret-tip">系统不会存储AccessKey，请同步完妥善保管</div>
-        </el-form-item>
         <el-form-item label="主机组" prop="hostGroupId">
-          <el-select v-model="syncForm.hostGroupId" placeholder="请选择主机组" style="width: 100%">
+          <el-select v-model="syncForm.hostGroupId" style="width: 100%">
             <el-option
               v-for="group in hostGroups"
               :key="group.id"
@@ -520,21 +501,17 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="同步地域" prop="regions">
-          <el-select
-            v-model="syncForm.regions"
-            multiple
-            collapse-tags
-            style="width: 100%"
-            placeholder="请选择同步地域"
-          >
-            <el-option
-              v-for="region in availableRegions[syncForm.provider]"
-              :key="region.id"
-              :label="region.name"
-              :value="region.id"
-            />
-          </el-select>
+        <el-form-item
+          label="AccessKey"
+          prop="accessKey"
+        >
+          <el-input v-model="syncForm.accessKey" />
+        </el-form-item>
+        <el-form-item
+          label="AccessSecret"
+          prop="accessSecret"
+        >
+          <el-input v-model="syncForm.accessSecret" type="password" show-password />
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -569,57 +546,6 @@ export default {
   name: 'HostManager',
   data() {
     return {
-      // 主机云同步相关
-      availableRegions: {
-        aliyun: [
-          { id: 'cn-qingdao', name: '华北1（青岛）' },
-          { id: 'cn-beijing', name: '华北2（北京）' },
-          { id: 'cn-zhangjiakou', name: '华北3（张家口）' },
-          { id: 'cn-huhehaote', name: '华北5（呼和浩特）' },
-          { id: 'cn-wulanchabu', name: '华北6（乌兰察布）' },
-          { id: 'cn-hangzhou', name: '华东1（杭州）' },
-          { id: 'cn-shanghai', name: '华东2（上海）' },
-          { id: 'cn-nanjing', name: '华东5 （南京-本地地域）' },
-          { id: 'cn-fuzhou', name: '华东6（福州-本地地域）' },
-          { id: 'cn-wuhan-lr', name: '华中1（武汉-本地地域）' },
-          { id: 'cn-shenzhen', name: '华南1（深圳）' },
-          { id: 'cn-heyuan', name: '华南2（河源）' },
-          { id: 'cn-guangzhou', name: '华南3（广州）' },
-          { id: 'cn-chengdu', name: '西南1（成都）' },
-          { id: 'cn-hongkong', name: '中国香港' }
-        ],
-        aws: [
-          { id: 'us-east-1', name: '美国东部（弗吉尼亚北部）' },
-          { id: 'us-east-2', name: '美国东部（俄亥俄州）' },
-          { id: 'us-west-1', name: '美国西部（加利福尼亚北部）' },
-          { id: 'us-west-2', name: '美国西部（俄勒冈州）' },
-          { id: 'af-south-1', name: '非洲（开普敦）' },
-          { id: 'ap-east-1', name: '亚太地区（香港）' },
-          { id: 'ap-south-2', name: '亚太地区（德拉巴）' },
-          { id: 'ap-southeast-3', name: '亚太地区（雅加达）' },
-          { id: 'ap-southeast-4', name: '亚太地区（墨尔本）' },
-          { id: 'ap-south-1', name: '亚太地区（孟买）' },
-          { id: 'ap-northeast-3', name: '亚太地区（大阪）' },
-          { id: 'ap-northeast-2', name: '亚太地区（首尔）' },
-          { id: 'ap-southeast-1', name: '亚太地区（新加坡）' },
-          { id: 'ap-southeast-2', name: '亚太地区（悉尼）' },
-          { id: 'ap-northeast-1', name: '亚太地区（东京）' },
-          { id: 'ca-central-1', name: '加拿大（中部）' },
-          { id: 'ca-west-1', name: '加拿大（卡尔加里）' },
-          { id: 'eu-central-1', name: '欧洲（法兰克福）' },
-          { id: 'eu-west-1', name: '欧洲（爱尔兰）' },
-          { id: 'eu-west-2', name: '欧洲（伦敦）' },
-          { id: 'eu-south-1', name: '欧洲（米兰）' },
-          { id: 'eu-west-3', name: '欧洲（巴黎）' },
-          { id: 'eu-south-2', name: '欧洲（西班牙）' },
-          { id: 'eu-north-1', name: '欧洲（斯德哥尔摩）' },
-          { id: 'eu-central-2', name: '欧洲（苏黎世）' },
-          { id: 'me-south-1', name: '中东（巴林）' },
-          { id: 'me-central-1', name: '中东（阿联酋）' },
-          { id: 'il-central-1', name: '中东（特拉维夫）' },
-          { id: 'sa-east-1', name: '南美洲（圣保罗）' }
-        ]
-      },
       // 主机组相关
       hostGroups: [],
       hostGroupsLoading: false,
@@ -654,30 +580,18 @@ export default {
       syncVisible: false,
       // 表单数据
       form: this.getInitialForm(),
-      // 主机云同步表单
       syncForm: {
-        provider: '',
-        accessKey: '',
-        accessSecret: '',
-        regions: [] // 新增 regions 字段
-      },
-      // 修改 syncForm 的验证规则
-      syncFormRules: {
         provider: [
           { required: true, message: '请选择云服务商', trigger: 'change' }
+        ],
+        hostGroupId: [
+          { required: true, message: '请选择主机组', trigger: 'change' }
         ],
         accessKey: [
           { required: true, message: '请输入AccessKey', trigger: 'blur' }
         ],
         accessSecret: [
           { required: true, message: '请输入AccessSecret', trigger: 'blur' }
-        ],
-        regions: [
-          { required: true, message: '请选择同步地域', trigger: 'change' },
-          { type: 'array', min: 1, message: '请至少选择一个地域', trigger: 'change' }
-        ],
-        hostGroupId: [
-          { required: true, message: '请选择同步的主机组', trigger: 'change' }
         ]
       },
       // 标签输入
@@ -760,59 +674,6 @@ export default {
         region: '',
         description: ''
       }
-    },
-    // 处理云服务商变更
-    handleProviderChange(provider) {
-      this.syncForm.regions = [] // 清空已选择的地域
-    },
-
-    // 获取当前可用地域
-    getCurrentRegions() {
-      return this.availableRegions[this.syncForm.provider] || []
-    },
-
-    // 处理同步提交
-    async handleSyncSubmit() {
-      try {
-        await this.$refs.syncForm.validate()
-
-        this.syncing = true
-        const params = {
-          provider: this.syncForm.provider,
-          accessKey: this.syncForm.accessKey,
-          accessSecret: this.syncForm.accessSecret,
-          regions: this.syncForm.regions,
-          hostGroupId: this.syncForm.hostGroupId
-        }
-
-        await syncCloudHosts(params)
-
-        this.$message.success('同步任务已提交')
-        this.syncVisible = false
-        this.fetchHosts() // 刷新主机列表
-      } catch (error) {
-        this.$message.error(error.message || '提交同步任务失败')
-      } finally {
-        this.syncing = false
-      }
-    },
-    // 重置同步表单
-    resetSyncForm() {
-      if (this.$refs.syncForm) {
-        this.$refs.syncForm.resetFields()
-      }
-      this.syncForm = {
-        provider: '',
-        accessKey: '',
-        accessSecret: '',
-        regions: [],
-        hostGroupId: []
-      }
-    },
-    // 打开同步对话框
-    handleSync() {
-      this.syncVisible = true
-      this.resetSyncForm()
     },
     // 获取主机组列表
     async fetchHostGroups() {
@@ -1223,6 +1084,26 @@ export default {
       }
     },
 
+    // 处理同步
+    handleSync() {
+      this.syncVisible = true
+    },
+    async handleSyncSubmit() {
+      this.$refs.syncForm.validate(async valid => {
+        if (!valid) return
+        this.syncing = true
+        try {
+          await syncCloudHosts(this.syncForm)
+          this.$message.success('同步成功')
+          this.syncVisible = false
+          this.fetchHosts()
+        } catch (error) {
+          this.$message.error(error.message || '同步失败')
+        } finally {
+          this.syncing = false
+        }
+      })
+    },
     // 工具方法
     formatDate,
     getStatusType(status) {
@@ -1251,9 +1132,6 @@ export default {
       if (usage >= 90) return '#F56C6C'
       if (usage >= 70) return '#E6A23C'
       return '#67C23A'
-    },
-    convertToGB(memoryMB) {
-      return (memoryMB / 1024).toFixed(2) // 转换为 GB，保留两位小数
     }
   }
 }
@@ -1464,10 +1342,4 @@ export default {
     }
   }
 }
-.accesssecret-tip {
-  font-size: 12px;
-  color: #999;
-  margin-top: 5px;
-}
-
 </style>

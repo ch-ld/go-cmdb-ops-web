@@ -49,14 +49,14 @@ export function batchDeleteHosts(ids) {
 export function checkHost(id) {
   return request({
     url: `/api/cmdb/hosts/check/${id}`,
-    method: 'get'
+    method: 'post'
   })
 }
 
 // 同步云主机
 export function syncCloudHosts(data) {
   return request({
-    url: '/api/cmdb/hosts/sync',
+    url: '/api/cmdb/host/sync',
     method: 'post',
     data
   })

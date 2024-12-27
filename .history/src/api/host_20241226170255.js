@@ -56,7 +56,7 @@ export function checkHost(id) {
 // 同步云主机
 export function syncCloudHosts(data) {
   return request({
-    url: '/api/cmdb/hosts/sync',
+    url: '/api/cmdb/host/sync',
     method: 'post',
     data
   })
